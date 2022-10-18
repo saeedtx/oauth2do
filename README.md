@@ -8,7 +8,7 @@ This bash script is used to authenticate with Google's OAuth2 service and genera
 - Optains google oauth2 tokens and caches it locally
 - Silently dumps the access token to stdout, even on intitial authenication  
 - Very Useful as 'PassCmd' commands for apps that require oauth2 authentication
-- see [mbsync](README.md#mbsync-dot-file) example below
+- see [mbsync](README.md#mbsync) example below
   
 Example command line: 
   
