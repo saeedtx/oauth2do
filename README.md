@@ -6,12 +6,12 @@ Scripts and tools to help with oauth2 services and access token queries
 This bash script is used to authenticate with Google's OAuth2 service and generate/refresh access tokens.
 
 - Optains google oauth2 tokens and caches it locally
-- Silently dumps the access token to stdout, even on intitial authenication  
+- Silently dumps the access token to stdout, even on intitial authenication
 - Very Useful as 'PassCmd' commands for apps that require oauth2 authentication
 - see [mbsync](README.md#mbsync) example below
-  
-Example command line: 
-  
+
+Example command line:
+
   `$ oauth2-google.sh --client_id=123456789.apps.googleusercontent.com --client_secret=abcdefg --scope=https://mail.google.com/`
 
 To create client app id and secret, please refere [Google documentation](https://developers.google.com/adwords/api/docs/guides/authentication)
@@ -20,7 +20,7 @@ To create client app id and secret, please refere [Google documentation](https:/
 Usage: oauth2-google.sh --option=value ...
 Options:
   --client-id      : Client ID
-  --client-secret  : Client Secret 
+  --client-secret  : Client Secret
   --login          : Login Hint, optional (email)
   --scope          : Scope (default: https://mail.google.com/)
   --port           : Port (default: 8088)
@@ -31,7 +31,29 @@ Options:
 Output: access_token
 ```
 
-#### mbsync 
+### oauth2-ms.sh
+
+This bash script is used to authenticate with Microsoft's OAuth2 service and generate/refresh access tokens.
+
+TODO: Refresh tokens aren't working for now, expect redirect auth url to pop up every now and then.
+
+```
+Usage: $ oauth2-ms.sh --option=value ...
+
+Options:
+  --client-id      : Client ID
+  --scope          : Scope (default: https://outlook.office.com/IMAP.AccessAsUser.All)
+  --port           : Port (default: 8087)
+  --browser        : Browser (default: firefox)
+  --store          : Directory to cache token files (default: $HOME/.var/ms-oauth2/)
+  --help           : This help
+
+Output: access_token
+
+Example: oauth2-ms.sh --client_id=12345
+```
+
+#### mbsync
 dot file (mbsyncrc)
 ```
 IMAPAccount gmail
