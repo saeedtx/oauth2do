@@ -35,8 +35,6 @@ Output: access_token
 
 This bash script is used to authenticate with Microsoft's OAuth2 service and generate/refresh access tokens.
 
-TODO: Refresh tokens aren't working for now, expect redirect auth url to pop up every now and then.
-
 ```
 Usage: $ oauth2-ms.sh --option=value ...
 

@@ -128,12 +128,10 @@ function fetch_auth_code {
 	URL+="&response_type=code"
 	URL+="&redirect_uri=$redirect_uri"
 	URL+="&response_mode=query"
-	URL+="&scope=$SCOPE"
+	URL+="&scope=offline_access%20$SCOPE"
 	URL+="&access_type=offline"
 
-	#URL="http://localhost:8087/?code=0.AVsAFT0IQ3NywUC32znv2czBeiZILxL5rV1GjoTp0AvJ8jQ4AAA.AgABAAIAAAD--DLA3VO7QrddgJg7WevrAgDs_wQA9P-1jPIVszWsSHdci10NtHlkLF3F6fnJil1l2KhzJMZtulKE-vesBf08WbyM6cPUbQi2-V91G0quJtWp4OruUcc16eMQ_xjVDgPVZSWUP2-YxMADQsrqRZL-V68HXtjZvPb88ztoxq7EirbfzvZzasIGDWmb5AzwOYxQ9Lw66TmQUBnmcQMCF2-KfMtX7PlMnC5UMFtxNM2s_44KFn6Nj4nRDRBHpSPsfa_m1XxySYnoGtNL-1NnWzaeJbYoqbT9aK-IgnK241tMH4opdvJ0gPndAhs5hczWqGLOd70rRoDi5XKg6PFNYUYL7_H1C8sFSwO6d-BHpMpAqBzWkPyWVdU4929OYsSI_1RSGpUHmKt-zAefqng1t4DhYegO-d9FKds07GqEJh-heEqfsk-U3TEYdMQVX0OH71S0i79Pl5NjVrY-TJC6M3KV5HaQ3rMZqg6bY4USnj7Dsj2BBul2C-u-3WycS70dIX5yrRnz0CG_NML38vt1TfkmMGpwzqghlMe5RUVygDaQqwocdmXpAuiPoy9LeGJ3U7fKMQvXVk16d6aiKTfPX1z_EbVW-vOnaEj8e9zPMhOS1DD5-gsTu27nP5AkbO6OJuZ2mgZnWAjLwjgc5BNtYSnhg9fMueek_bUWrIq2I5ZzIUFocuYJl6gKTfJO-VnD8B-whDiuI4N6mDc9k-_o9hJw&session_state=d12d6021-7097-4727-abaa-97f482dd2283"
 	$BROWSER "$URL" &
-	echo "waiting for auth code..."
 	wait_for_auth_code
 }
 
@@ -142,9 +140,8 @@ function fetch_refresh_token {
 	[ -z "$auth_code" ] && return 1
 
 	DATA="client_id=$CLIENT_ID"
-	DATA+="&scope=$SCOPE"
+	DATA+="&scope=offline_access%20$SCOPE"
 	DATA+="&code=$auth_code"
-	#DATA+="&client_secret=$CLIENT_SECRET"
 	DATA+="&redirect_uri=$redirect_uri"
 	DATA+="&grant_type=authorization_code"
 	DATA+="&access_type=offline" # NOTE: This is required for refresh tokens
@@ -160,7 +157,7 @@ function refresh_access_token {
 	[ -z "$refresh_token" ] && return 1
 
 	DATA="client_id=$CLIENT_ID"
-	DATA+="&scope=$SCOPE"
+	DATA+="&scope=offline_access%20$SCOPE"
 	DATA+="&refresh_token=$refresh_token"
 	DATA+="&grant_type=refresh_token"
 
@@ -169,7 +166,7 @@ function refresh_access_token {
 	curl -s -X POST --data "$DATA" $URL > $STORE/access_token
 }
 
-# set -x # DEBUG
+#set -x # DEBUG
 
 access_token=$(get_access_token $STORE/refresh_token)
 [ -z "$access_token" ] && access_token=$(get_access_token $STORE/access_token)
@@ -177,8 +174,6 @@ access_token=$(get_access_token $STORE/refresh_token)
 [ -z "$access_token" ] && {
 	# no token/expired ? try refresh, refresh tokens are valid for 24h
 
-	# TODO: for some reason we don't get refresh tokens
-	#       so the refresh flow isn't doing anything for now..
 	refresh_access_token
 	access_token=$(get_access_token $STORE/access_token)
 }
@@ -189,9 +184,16 @@ access_token=$(get_access_token $STORE/refresh_token)
 	fetch_refresh_token
 	access_token=$(get_access_token $STORE/refresh_token)
 	[ -z "$access_token" ] && {
-		 refresh_access_token
+		refresh_access_token
 		access_token=$(get_access_token $STORE/access_token)
 	}
 }
 
 echo $access_token
+[ -z "$access_token" ] &&  {
+	echo "ERROR: no access token"
+	cat $STORE/refresh_token
+	cat $STORE/access_token
+	exit 1
+}
+exit 0
