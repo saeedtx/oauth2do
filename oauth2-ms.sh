@@ -12,7 +12,7 @@
 default_scope="https://outlook.office.com/IMAP.AccessAsUser.All"
 default_port=8087
 default_browser="firefox"
-default_store="$HOME/.var/ms-oauth2/"
+default_store="$HOME/var/ms-oauth2/"
 
 function usage {
 	echo "Usage: $0 --option=value ..."
