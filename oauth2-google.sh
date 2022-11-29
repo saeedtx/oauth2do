@@ -82,8 +82,8 @@ function wait_for_auth_code {
 		code=$(echo $line | grep -oP 'code=\K[^&]*')
 		[ -z "$code" ] && echo "failed to extract code: resp: $line" && exit 1
 		echo $code > $STORE/auth_code
-		kill -9 $NCPID > /dev/null 2>&1
-		unset NCPID
+		( sleep 0.2; kill -9 $NCPID &> /dev/null ) &
+		wait $NCPID; unset NCPID
 	else
 		echo "Failed to get auth code"
 		echo $line
