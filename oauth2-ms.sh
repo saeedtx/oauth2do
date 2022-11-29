@@ -49,7 +49,7 @@ CLIENT_ID=$(get_arg client_id)
 LPORT=$(get_arg port); LPORT=${LPORT:-$default_port}
 STORE=$(get_arg store);STORE=${STORE:-$default_store}
 BROWSER=$(get_arg browser);BROWSER=${BROWSER:-$default_browser}
-SCOPE=$(get_arg scope);SCOPE=${scope:-$default_scope}
+SCOPE=$(get_arg scope);SCOPE=${SCOPE:-$default_scope}
 
 [ -z "$CLIENT_ID" ] && echo "Missing: client-id" && usage && exit 1
 

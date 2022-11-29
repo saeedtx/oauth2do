@@ -49,7 +49,7 @@ CLIENT_SECRET=$(get_arg client_secret)
 LPORT=$(get_arg port); LPORT=${LPORT:-8088}
 STORE=$(get_arg store);STORE=${STORE:-$default_store}
 BROWSER=$(get_arg browser);BROWSER=${BROWSER:-$default_browser}
-SCOPE=$(get_arg scope);SCOPE=${scope:-$default_scope}
+SCOPE=$(get_arg scope);SCOPE=${SCOPE:-$default_scope}
 LOGIN_HINT=$(get_arg login)
 
 [ -z "$CLIENT_ID" ] && echo "Missing: client-id" && usage && exit 1
